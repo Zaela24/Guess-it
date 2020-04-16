@@ -58,13 +58,12 @@ class ScoreFragment : Fragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(ScoreViewModel::class.java)
 
-        // Updates LiveData variables
-        viewModel.score.observe(this, Observer {newScore ->
-            binding.scoreText.text = newScore.toString()
-        })
+        // Enables onClickListeners directly in XML
+        binding.scoreViewModel = viewModel
+        // Enables LiveData updates directly in XML
+        binding.lifecycleOwner = this
 
-        binding.playAgainButton.setOnClickListener { viewModel.onPlayAgain() }
-
+        // When PlayAgain is clicked...
         viewModel.eventPlayAgain.observe(this, Observer { playAgain ->
             if (playAgain) {
                 findNavController().navigate(ScoreFragmentDirections.actionRestart())
